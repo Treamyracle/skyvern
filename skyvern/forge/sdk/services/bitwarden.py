@@ -1577,7 +1577,6 @@ class BitwardenService:
         """
         Get the secret value from the Bitwarden CLI.
         """
-        fail_reasons: list[str] = []
 
         async def fetch(session: _CliSession) -> dict[str, str]:
             session_key = session.session_key or ""
