@@ -1577,6 +1577,7 @@ class BitwardenService:
         """
         Get the secret value from the Bitwarden CLI.
         """
+        fail_reasons: list[str] = []
 
         async def fetch(session: _CliSession) -> dict[str, str]:
             session_key = session.session_key or ""
@@ -1714,12 +1715,14 @@ class BitwardenService:
         identity_fields: list[str],
         remaining_retries: int = settings.BITWARDEN_MAX_RETRIES,
         timeout: int = settings.BITWARDEN_TIMEOUT_SECONDS,
-        fail_reasons: list[str] = [],
+        fail_reasons: list[str] | None = None,
         email: str | None = None,
     ) -> dict[str, str]:
         """
         Get the secret value from the Bitwarden CLI.
         """
+        if fail_reasons is None:
+            fail_reasons = []
         if not bw_organization_id and bw_collection_ids and collection_id not in bw_collection_ids:
             raise BitwardenAccessDeniedError()
         if not fail_reasons:
@@ -2045,12 +2048,14 @@ class BitwardenService:
         collection_id: str,
         item_id: str,
         remaining_retries: int = settings.BITWARDEN_MAX_RETRIES,
-        fail_reasons: list[str] = [],
+        fail_reasons: list[str] | None = None,
         email: str | None = None,
     ) -> dict[str, str]:
         """
         Get the credit card data from the Bitwarden CLI.
         """
+        if fail_reasons is None:
+            fail_reasons = []
         if not is_uuid(item_id):
             raise BitwardenGetItemError(f"Invalid item ID: {item_id}. Check if the item ID is correct")
 
